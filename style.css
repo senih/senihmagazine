@@ -1,0 +1,220 @@
+﻿
+body {
+	margin: 0;
+	padding: 0;
+	background: #666159 url(images/img01.jpg) repeat-x;
+	font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+	font-size: 13px;
+	color: #D4D4D4;
+}
+
+h1, h2, h3 {
+	margin: 0;
+	text-transform: lowercase;
+	font-weight: normal;
+	color: #FFFFFF;
+}
+
+h1 {
+	letter-spacing: -1px;
+	font-size: 32px;
+}
+
+h2 {
+	font-size: 23px;
+}
+
+p, ul, ol {
+	margin: 0 0 2em 0;
+	text-align: justify;
+	font-size: 14px;
+}
+
+a:link {
+	color: #C1D11C;
+}
+
+a:hover, a:active {
+	text-decoration: none;
+	color: #C1D11C;
+}
+
+a:visited {
+	color: #C1D11C;
+}
+
+img {
+	border: none;
+}
+
+img.left {
+	float: left;
+	margin-right: 15px;
+}
+
+img.right {
+	float: right;
+	margin-left: 15px;
+}
+
+
+
+/* Header */
+
+#header {
+	width: 600px;
+	height: 82px;
+	margin: 0 auto 40px auto;
+}
+
+#logo {
+	float: left;
+}
+
+#logo h1 {
+	font-size: 38px;
+	color: #FFFFFF;
+}
+
+#logo h1 sup {
+	vertical-align: text-top;
+	font-size: 24px;
+}
+
+#logo h1 a {
+	color: #FFFFFF;
+}
+
+#logo h2 {
+	margin-top: -10px;
+	font-size: 12px;
+	color: #A0A0A0;
+}
+
+#logo a {
+	text-decoration: none;
+}
+
+
+/* Page */
+
+#page {
+	width: 600px;
+	margin: 0 auto;
+}
+
+/* Content */
+
+#content {
+	float: left;
+	width: 600px;
+}
+
+/* Post */
+
+.post {
+}
+
+.post .title {
+	margin-bottom: 20px;
+	margin-top: 20px;
+	padding: 0 0 7px 18px;
+	background: url(images/img03.gif) no-repeat left 50%;
+	border-bottom: 1px solid #86910F;
+}
+
+.post .entry {
+    padding-left:20px;
+}
+
+.post .meta {
+	border: 1px solid #86910F;
+	padding: 15px 10px 30px 10px;
+}
+
+.post .meta p {
+	margin: 0;
+	line-height: normal;
+	color: #999999;
+}
+
+.post .meta .byline {
+	float: left;
+}
+
+.post .meta .links {
+	float: right;
+}
+
+.post .meta .more {
+	padding: 0 20px 0 18px;
+	background: url(images/img06.gif) no-repeat left center;
+}
+
+.post .meta .comments {
+	padding-left: 22px;
+	background: url(images/img07.gif) no-repeat left center;
+}
+
+.post .meta b {
+	display: none;
+}
+
+
+
+/* Boxes */
+
+.box1 {
+	padding: 20px;
+	background: url(images/img05.gif) no-repeat;
+}
+
+.box2 {
+	color: #BABABA;
+}
+
+.box2 h2 {
+	margin-bottom: 15px;
+	background: url(images/img10.gif) repeat-x left bottom;
+	font-size: 16px;
+	color: #FFFFFF;
+}
+
+.box2 ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.box2 a:link, .box2 a:hover, .box2 a:active, .box2 a:visited  {
+	color: #EDEDED;
+}
+
+/* Footer */
+
+#footer {
+	height: 100px;
+	min-height: 74px;
+	padding: 10px 0 0 0;
+	background: #666159 url(images/img02.jpg) repeat-x left top;
+}
+
+html>body #footer {
+	height: auto;
+}
+
+#legal {
+	clear: both;
+	padding-top: 30px;
+	text-align: center;
+	color: #A0A0A0;
+}
+
+#legal a {
+	color: #A0A0A0;
+}
+
+.clearboth
+{
+    clear:both;
+}

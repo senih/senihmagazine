@@ -1,12 +1,16 @@
-<content width="1329" height="1713" bgcolor="cccccc" loadercolor="ffffff" panelcolor="5d5d61" buttoncolor="5d5d61" textcolor="ffffff">
-  <page src="pages/1.jpg" />
-  <page src="pages/2.jpg" />
-  <page src="pages/3.jpg" />
-  <page src="pages/4.jpg" />
-  <page src="pages/5.jpg" />
-  <page src="pages/6.jpg" />
-  <page src="pages/7.jpg" />
-  <page src="pages/8.jpg" />
-  <page src="pages/9.jpg" />
-  <page src="pages/10.jpg" />
+<content width="1329" height="1713" bgcolor="666159" loadercolor="ffffff" panelcolor="5d5d61" buttoncolor="5d5d61" textcolor="ffffff">
+  <page src="content/life/1.jpg" />
+  <page src="content/life/2.jpg" />
+  <page src="content/life/3.jpg" />
+  <page src="content/life/4.jpg" />
+  <page src="content/life/5.jpg" />
+  <page src="content/life/6.jpg" />
+  <page src="content/life/7.jpg" />
+  <page src="content/life/8.jpg" />
+  <page src="content/life/9.jpg" />
+  <page src="content/life/10.jpg" />
+  <page src="content/life/11.jpg" />
+  <page src="content/life/12.jpg" />
+  <page src="content/life/13.jpg" />
+  <page src="content/life/14.jpg" />
 </content>

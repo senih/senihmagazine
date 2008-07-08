@@ -115,24 +115,34 @@ namespace Magazine
             newimage.Dispose();
         }
 
-        public static string CreateImagesGhostScript(string inputfile)
+        public static string CreateImagesGhostScript(Issue newIssue)
         {
+            string status = "Error!";
             string app = ConfigurationManager.AppSettings["gspath"] + "gswin32";
-            string pdf = inputfile;
-            string output = HttpContext.Current.Server.MapPath("~/pages") + @"\%d.jpg ";
-            string args = @" -sDEVICE=jpeg -r150 -dJPEGQ=80 -dTextAlphaBits=4 -dGraphicsAlphaBits=4 -dUseCIEColor=true -o " + output + inputfile;
-            ProcessStartInfo procInfo = new ProcessStartInfo(app, args);
-            procInfo.WindowStyle = ProcessWindowStyle.Hidden;
-            procInfo.RedirectStandardOutput = true;
-            procInfo.RedirectStandardInput = true;
-            procInfo.RedirectStandardError = true;
-            procInfo.UseShellExecute = false;
+            string pdfpath = HttpContext.Current.Server.MapPath("~/pdf");
+            string pdf = pdfpath + @"\temp.pdf";
+            string output = newIssue.IssueDirectory + @"\%d.jpg ";
+            string args = @" -sDEVICE=jpeg -r" + newIssue.Resolution + " -dJPEGQ=" + newIssue.Quality + " -dTextAlphaBits=" + newIssue.TextAntialiasing + " -dGraphicsAlphaBits=" + newIssue.GraphicsAntialiasing + " -dUseCIEColor=true -o " + output + pdf;
+            try
+            {
+                ProcessStartInfo procInfo = new ProcessStartInfo(app, args);
+                procInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                procInfo.RedirectStandardOutput = true;
+                procInfo.RedirectStandardInput = true;
+                procInfo.RedirectStandardError = true;
+                procInfo.UseShellExecute = false;
 
-            Process createImages = Process.Start(procInfo);
-            StreamReader reader = createImages.StandardOutput;
-            string temp = reader.ReadLine();
-            reader.Close();
-            string status = "Image files created!";
+                Process createImages = Process.Start(procInfo);
+                StreamReader reader = createImages.StandardOutput;
+                string temp = reader.ReadLine();
+                reader.Close();
+                createImages.Close();
+                status = "Image files created!";
+            }
+            catch (System.Exception ex)
+            {
+                status = ex.ToString();
+            }
             return status;
         }
     }

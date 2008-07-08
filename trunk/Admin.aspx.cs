@@ -28,7 +28,7 @@ public partial class Admin : System.Web.UI.Page
             {
                 try
                 {
-                    FileUpload.SaveAs(path + FileUpload.FileName);
+                    FileUpload.SaveAs(path + "temp.pdf");
                     Label1.Text = "File uploaded!";
                     Panel1.Visible = false;
                     Panel2.Visible = true;
@@ -55,7 +55,7 @@ public partial class Admin : System.Web.UI.Page
         {
             File.Delete(file);
         }
-        Label2.Text = CreateImages.CreateImagesGhostScript(inputfile);
+       // Label2.Text = CreateImages.CreateImagesGhostScript(inputfile);
         File.Delete(inputfile);
         Panel2.Visible = false;
         Panel3.Visible = true;
@@ -85,7 +85,7 @@ public partial class Admin : System.Web.UI.Page
         //{
         //    CreateImages.ResizeImages(file);
         //}
-        CreateXML.CreatePagesXMLFile();
+        //CreateXML.CreatePagesXMLFile();
         Label3.Text = "XML file created!";
         Panel3.Visible = false;
         Panel4.Visible = true;

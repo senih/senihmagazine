@@ -44,10 +44,10 @@ namespace Magazine
         //    return status;
         //}
 
-        public static string UploadUsingClient(string host, string user, string password)
+        public static string UploadUsingClient(string issueId, string host, string user, string password)
         {
             string status;
-            string[] files = Directory.GetFiles(HttpContext.Current.Server.MapPath("~/pages"));
+            string[] files = Directory.GetFiles(HttpContext.Current.Server.MapPath("~/content/" + issueId), "*.jpg");
             int port = 21;
             EnterpriseDT.Net.Ftp.FTPClient ftpclient = new EnterpriseDT.Net.Ftp.FTPClient();
             try
@@ -57,7 +57,9 @@ namespace Magazine
                 ftpclient.Connect();
                 ftpclient.Login(user, password);
                 ftpclient.TransferType = EnterpriseDT.Net.Ftp.FTPTransferType.BINARY;
-                ftpclient.ChDir("pages");
+                ftpclient.ChDir("content");
+                ftpclient.MkDir(issueId);
+                ftpclient.ChDir(issueId);
                 int totalFiles = files.Length;
                 int uploadedFiles = 0;
                 foreach (string file in files)

@@ -145,5 +145,16 @@ namespace Magazine
             }
             return status;
         }
+
+        public static void DeleteImages(string issueId)
+        {
+            string path = HttpContext.Current.Server.MapPath("~/content/" + issueId);
+            string[] files = Directory.GetFiles(path);
+            foreach (string file in files)
+            {
+                File.Delete(file);
+            }
+            Directory.Delete(path);
+        }
     }
 }

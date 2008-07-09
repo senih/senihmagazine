@@ -76,7 +76,7 @@ public partial class Admin : System.Web.UI.Page
 
         //Label4.Text = "Files uploaded on web server!";
 
-        Label4.Text = Upload.UploadUsingClient(HostTextBox.Text, UserTextBox.Text, PasswordTextBox.Text);
+//        Label4.Text = Upload.UploadUsingClient(HostTextBox.Text, UserTextBox.Text, PasswordTextBox.Text);
     }
     protected void btnCreateXML_Click(object sender, EventArgs e)
     {

@@ -9,6 +9,7 @@ using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 using System.Web.UI.WebControls.WebParts;
 using System.IO;
+using System.Text.RegularExpressions;
 using Magazine;
 
 public partial class Administration : System.Web.UI.Page
@@ -16,10 +17,17 @@ public partial class Administration : System.Web.UI.Page
     protected void Page_Load(object sender, EventArgs e)
     {
         if (IsPostBack)
+        {
             StatusLabel.Text = string.Empty;
+        }
+        Panel1.Visible = false;
+        UploadPanel.Visible = false;
+        btnPreview.Attributes.Add("OnClick", "window.open('magazine.html');");
+        
     }
-    protected void btnUpload_Click(object sender, EventArgs e)
+    protected string UploadPdfFile()
     {
+        string status;
         string path = Server.MapPath("~/PDF/");
         if (FileUpload.HasFile)
         {
@@ -29,81 +37,94 @@ public partial class Administration : System.Web.UI.Page
                 try
                 {
                     FileUpload.SaveAs(path + "temp.pdf");
-                    Label1.Text = "File uploaded!";
+                    status = "File uploaded!";
                 }
                 catch (Exception ex)
                 {
-                    Label1.Text = ex.ToString();
+                    status = ex.ToString();
                 }
             }
             else
             {
-                Label1.Text = "You can upload only *.pdf files";
+                status = "You can upload only *.pdf files";
             }
         }
         else
-            Label1.Text = "Select file to upload!";
+            status = "Select file to upload!";
+        return status;
     }
     protected void btnCreate_Click(object sender, EventArgs e)
     {
-        Issue newIssue = new Issue();
-        newIssue.IssueId = NameTextBox.Text;
-        newIssue.IssueDirectory = ConfigurationManager.AppSettings["imagepath"] + NameTextBox.Text;
-        if (Directory.Exists(newIssue.IssueDirectory))
-            StatusLabel.Text = "Folder already exists!";
-        else
+        string temp2 = UploadPdfFile();
+        if (temp2 == "File uploaded!")
         {
-            if (!File.Exists(HttpContext.Current.Server.MapPath("~/pdf") + @"\temp.pdf"))
-                StatusLabel.Text = "Please upload PDF file first!";
-            else
+            string temp1 = NameTextBox.Text;
+            int chk = temp1.IndexOf(" ");
+            if ((IsAlphaNumeric(NameTextBox.Text)) && chk == -1)
             {
-                Directory.CreateDirectory(newIssue.IssueDirectory);
-                newIssue.Resolution = ResolutionDropDownList.SelectedValue;
-                newIssue.Quality = QualityTextBox.Text;
-                newIssue.TextAntialiasing = TxtAliasingDropDownList.SelectedValue;
-                newIssue.GraphicsAntialiasing = GraphAliasingDropDownList.SelectedValue;
-                StatusLabel.Text = CreateImages.CreateImagesGhostScript(newIssue);
-                string pdfpath = HttpContext.Current.Server.MapPath("~/pdf");
-                string sourcePDF = pdfpath + @"\temp.pdf";
-                string destinationPDF = newIssue.IssueDirectory + @"\" + newIssue.IssueId + ".pdf";
-                File.Move(sourcePDF, destinationPDF);
-                MagazineData.CreateIssue(newIssue);
-                CreateXML.CreatePagesXMLFile(newIssue.IssueId);
-                btnPreview.Visible = true;
+                Issue newIssue = new Issue();
+                newIssue.IssueId = NameTextBox.Text;
+                newIssue.IssueDirectory = ConfigurationManager.AppSettings["imagepath"] + NameTextBox.Text;
+                if (Directory.Exists(newIssue.IssueDirectory))
+                    StatusLabel.Text = "Folder already exists!";
+                else
+                {
+                    if (!File.Exists(HttpContext.Current.Server.MapPath("~/pdf") + @"\temp.pdf"))
+                        StatusLabel.Text = "Please upload PDF file first!";
+                    else
+                    {
+                        Directory.CreateDirectory(newIssue.IssueDirectory);
+                        newIssue.Resolution = ResolutionDropDownList.SelectedValue;
+                        newIssue.Quality = QualityTextBox.Text;
+                        newIssue.TextAntialiasing = TxtAliasingDropDownList.SelectedValue;
+                        newIssue.GraphicsAntialiasing = GraphAliasingDropDownList.SelectedValue;
+                        StatusLabel.Text = CreateImages.CreateImagesGhostScript(newIssue);
+                        string pdfpath = HttpContext.Current.Server.MapPath("~/pdf");
+                        string sourcePDF = pdfpath + @"\temp.pdf";
+                        string destinationPDF = newIssue.IssueDirectory + @"\" + newIssue.IssueId + ".pdf";
+                        File.Move(sourcePDF, destinationPDF);
+                        if (StatusLabel.Text == "Image files created!")
+                        {
+                            MagazineData.CreateIssue(newIssue);
+                            CreateXML.CreatePagesXMLFile(newIssue.IssueId);
+                            btnPreview.Visible = true;
+                            btnUploadOnServer.Visible = true;
+                        }
+                        else
+                            StatusLabel.Text = "Error!";
+                    }
+                }
             }
+            else StatusLabel.Text = "Enter valid Issue name";
         }
+        else
+            StatusLabel.Text = temp2;
     }
     protected void btnNew_Click(object sender, EventArgs e)
     {
         TitleLabel.Text = "New Issue";
+        NameTextBox.Text = string.Empty;
+        ResolutionDropDownList.SelectedIndex = 0;
+        QualityTextBox.Text = string.Empty;
+        TxtAliasingDropDownList.SelectedIndex = 0;
+        GraphAliasingDropDownList.SelectedIndex = 0;
         IssuePanel.Visible = true;
-        OpenDropDownList.Visible = false;
+        Panel1.Visible = false;
         NameTextBox.Visible = true;
         btnUpdate.Visible = false;
         btnCreate.Visible = true;
         btnPreview.Visible = false;
+        btnUploadOnServer.Visible = false;
+        IssueNameLabel.Visible = true;
+        IssueNameLabel.Text = "Issue name: ";
     }
     protected void btnOpen_Click(object sender, EventArgs e)
     {
         TitleLabel.Text = "Open Issue";
-        IssuePanel.Visible = true;
-        NameTextBox.Visible = false;
-        OpenDropDownList.Visible = true;
-        btnCreate.Visible = false;
-        btnUpdate.Visible = true;
-        btnPreview.Visible = false;
+        IssuePanel.Visible = false;
+        Panel1.Visible = true;
     }
-    protected void OpenDropDownList_SelectedIndexChanged(object sender, EventArgs e)
-    {
-        Issue existingIssue = MagazineData.OpenIssue(OpenDropDownList.SelectedValue);
-        ResolutionDropDownList.Text = existingIssue.Resolution;
-        QualityTextBox.Text = existingIssue.Quality;
-        TxtAliasingDropDownList.Text = existingIssue.TextAntialiasing;
-        GraphAliasingDropDownList.Text = existingIssue.GraphicsAntialiasing;
-        btnPreview.Visible = true;
-        btnPreview.Visible = true;
-        CreateXML.CreatePagesXMLFile(existingIssue.IssueId);
-    }
+
     protected void btnUpdate_Click(object sender, EventArgs e)
     {
         string[] pdfFiles = Directory.GetFiles(Server.MapPath("~/pdf"));
@@ -128,11 +149,53 @@ public partial class Administration : System.Web.UI.Page
         File.Copy(sourcePDF, destinationPDF, true);
         File.Delete(sourcePDF);
         MagazineData.UpdateIssue(newIssue);
-        btnPreview.Visible = true;
         CreateXML.CreatePagesXMLFile(newIssue.IssueId);
+        btnPreview.Visible = true;
+        RequiredFieldValidator4.Visible = false;
+        
+    }
+
+    protected void btnUploadOnServer_Click(object sender, EventArgs e)
+    {
+        IssuePanel.Visible = false;
+        UploadPanel.Visible = true;
+    }
+    protected void btnUploadOnWebServer_Click(object sender, EventArgs e)
+    {
+        StatusLabel.Text = Upload.UploadUsingClient(IssuesDropDownList.SelectedValue, HostTextBox.Text, UserTextBox.Text, PasswordTextBox.Text);
+    }
+
+    public static bool IsAlphaNumeric(string strToCheck)
+    {
+        Regex objAlphaNumericPattern = new Regex("[^a-zA-Z0-9 ]");
+        return !objAlphaNumericPattern.IsMatch(strToCheck);
+    }
+
+    protected void btnSelect_Click(object sender, EventArgs e)
+    {
+        Issue existingIssue = MagazineData.OpenIssue(OpenDropDownList.SelectedValue);
+        ResolutionDropDownList.Text = existingIssue.Resolution;
+        QualityTextBox.Text = existingIssue.Quality;
+        TxtAliasingDropDownList.Text = existingIssue.TextAntialiasing;
+        GraphAliasingDropDownList.Text = existingIssue.GraphicsAntialiasing;
+        CreateXML.CreatePagesXMLFile(existingIssue.IssueId);
+        btnPreview.Visible = true;
+        btnUploadOnServer.Visible = true;
+        IssuePanel.Visible = true;
+        Panel1.Visible = true;
+        IssueNameLabel.Visible = true;
+        NameTextBox.Visible = false;
+        btnCreate.Visible = false;
+        btnUpdate.Visible = true;
+        IssueNameLabel.Text = "Issue name: " + existingIssue.IssueId.ToUpper();
+    }
+    protected void btnDelete_Click(object sender, EventArgs e)
+    {
+        CreateImages.DeleteImages(OpenDropDownList.SelectedValue);
+        StatusLabel.Text = MagazineData.DeleteIssue(OpenDropDownList.SelectedValue);
     }
     protected void btnPreview_Click(object sender, EventArgs e)
     {
-        Response.Redirect("~/magazine.html");
+
     }
 }

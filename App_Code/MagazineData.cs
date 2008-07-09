@@ -89,5 +89,27 @@ namespace Magazine
             }
             return status;
         }
+
+        public static string DeleteIssue(string issueId)
+        {
+            string status = "Error";
+            string connectionString = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+            SqlConnection conncetion = new SqlConnection(connectionString);
+            string command = string.Format("DELETE FROM Issues WHERE IssueID='{0}'", issueId);
+            SqlCommand cmd = new SqlCommand(command, conncetion);
+            cmd.CommandType = CommandType.Text;
+            try
+            {
+                conncetion.Open();
+                int rowsaffected = cmd.ExecuteNonQuery();
+                conncetion.Close();
+                status = "Issue deleted!";
+            }
+            catch (Exception ex)
+            {
+                status = ex.ToString();
+            }
+            return status;
+        }
     }
 }

@@ -103,7 +103,7 @@ namespace Magazine
                 conncetion.Open();
                 int rowsaffected = cmd.ExecuteNonQuery();
                 conncetion.Close();
-                status = "Issue deleted!";
+                status = "Issue " + issueId.ToUpper() + " deleted!";
             }
             catch (Exception ex)
             {

@@ -63,32 +63,36 @@
                         </asp:Panel>
                         <asp:Panel ID="IssuePanel" runat="server" Visible="false">
                             <div>
-                                <asp:Label ID="IssueNameLabel" runat="server"></asp:Label>
-                                <asp:TextBox ID="NameTextBox" runat="server"></asp:TextBox>
-                                <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" 
-                                    ControlToValidate="NameTextBox" ErrorMessage="Enter folder name" 
-                                    ForeColor="White"></asp:RequiredFieldValidator>
                             <div>                                
                                 <table>
                                     <tr>
-                                        <td colspan="2">
-                                            &nbsp;</td>
                                         <td>
-                                            &nbsp;</td>
+                                            <asp:Label ID="IssueNameLabel" runat="server"></asp:Label>
+                                        </td>
+                                        <td>
+                                            <asp:TextBox ID="NameTextBox" runat="server"></asp:TextBox>
+                                        </td>
                                     </tr>
                                     <tr>
-                                        <td colspan="2">
+                                        <td>
+                                            &nbsp;</td>
+                                        <td>
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" 
+                                                ControlToValidate="NameTextBox" ErrorMessage="Enter folder name" 
+                                                ForeColor="White"></asp:RequiredFieldValidator>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
                                             <div ID="upload" runat="server">
                                                 Upload PDF file
-                                                <asp:FileUpload ID="FileUpload" runat="server" />
                                             </div>
                                         </td>
                                         <td>
-                                            &nbsp;</td>
+                                            <asp:FileUpload ID="FileUpload" runat="server" />
+                                        </td>
                                     </tr>
                                     <tr>
-                                        <td>
-                                            &nbsp;</td>
                                         <td>
                                             &nbsp;</td>
                                         <td>
@@ -97,8 +101,6 @@
                                     <tr>
                                         <td>
                                             Image settings</td>
-                                        <td>
-                                            &nbsp;</td>
                                         <td>
                                             &nbsp;</td>
                                     </tr>
@@ -114,8 +116,6 @@
                                                 <asp:ListItem>300</asp:ListItem>
                                             </asp:DropDownList>
                                             dpi</td>
-                                        <td>
-                                            &nbsp;</td>
                                     </tr>
                                     <tr>
                                         <td>
@@ -123,13 +123,18 @@
                                         <td>
                                             <asp:TextBox ID="QualityTextBox" runat="server" Width="50px"></asp:TextBox>
                                             %</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            &nbsp;</td>
                                         <td>
                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" 
-                                                ControlToValidate="QualityTextBox" ErrorMessage="Required Field" 
-                                                ForeColor="White"></asp:RequiredFieldValidator>
+                                                ControlToValidate="QualityTextBox" Display="Dynamic" 
+                                                ErrorMessage="Required Field" ForeColor="White"></asp:RequiredFieldValidator>
                                             <asp:RangeValidator ID="RangeValidator1" runat="server" 
-                                                ControlToValidate="QualityTextBox" ErrorMessage="Value must be between 1-100" 
-                                                ForeColor="White" MaximumValue="100" MinimumValue="1" Type="Integer"></asp:RangeValidator>
+                                                ControlToValidate="QualityTextBox" Display="Dynamic" 
+                                                ErrorMessage="Value must be between 1-100" ForeColor="White" MaximumValue="100" 
+                                                MinimumValue="1" Type="Integer"></asp:RangeValidator>
                                         </td>
                                     </tr>
                                     <tr>
@@ -142,8 +147,6 @@
                                                 <asp:ListItem>4</asp:ListItem>
                                             </asp:DropDownList>
                                         </td>
-                                        <td>
-                                            &nbsp;</td>
                                     </tr>
                                     <tr>
                                         <td>
@@ -155,38 +158,27 @@
                                                 <asp:ListItem>4</asp:ListItem>
                                             </asp:DropDownList>
                                         </td>
-                                        <td>
-                                            &nbsp;</td>
                                     </tr>
                                     <tr>
                                         <td>
                                             &nbsp;</td>
                                         <td>
                                             &nbsp;</td>
-                                        <td>
-                                            &nbsp;</td>
                                     </tr>
                                     <tr>
-                                        <td align="right" colspan="2">
+                                        <td align="right">
+                                            
+                                            &nbsp;</td>
+                                        <td align="right">
                                             <asp:Button ID="btnCreate" runat="server" onclick="btnCreate_Click" 
                                                 Text="Create" Width="60px" />
                                             <asp:Button ID="btnUpdate" runat="server" onclick="btnUpdate_Click" 
                                                 Text="Update" Width="60px" />
-                                            <asp:Button ID="btnPreview" runat="server" 
-                                                Text="Preview" Width="60px" CausesValidation="False" 
-                                                onclick="btnPreview_Click" />
+                                            <asp:Button ID="btnPreview" runat="server" CausesValidation="False" 
+                                                onclick="btnPreview_Click" Text="Preview" Width="60px" />
                                             <asp:Button ID="btnUploadOnServer" runat="server" CausesValidation="false" 
                                                 onclick="btnUploadOnServer_Click" Text="Upload" Width="60px" />
                                         </td>
-                                        <td align="right">
-                                            &nbsp;</td>
-                                    </tr>
-                                    <tr>
-                                        <td align="right" colspan="2">
-                                            <asp:Label ID="StatusLabel" runat="server"></asp:Label>
-                                        </td>
-                                        <td align="right">
-                                            &nbsp;</td>
                                     </tr>
                                 </table>
                                 <div>
@@ -259,6 +251,7 @@
                             </tr>
                         </table>
                         </asp:Panel>
+                        <asp:Label ID="StatusLabel" runat="server"></asp:Label>
                     </div>
                 </div>
             </div>

@@ -123,10 +123,13 @@ public partial class Administration : System.Web.UI.Page
         TitleLabel.Text = "Open Issue";
         IssuePanel.Visible = false;
         Panel1.Visible = true;
+        OpenDropDownList.DataBind();
     }
 
     protected void btnUpdate_Click(object sender, EventArgs e)
     {
+        if (FileUpload.HasFile)
+            UploadPdfFile();
         string[] pdfFiles = Directory.GetFiles(Server.MapPath("~/pdf"));
         string[] orgPdfFiles = Directory.GetFiles(Server.MapPath("~/content/" + OpenDropDownList.SelectedValue), "*.pdf");
         if (pdfFiles.Length == 0)
@@ -150,6 +153,7 @@ public partial class Administration : System.Web.UI.Page
         File.Delete(sourcePDF);
         MagazineData.UpdateIssue(newIssue);
         CreateXML.CreatePagesXMLFile(newIssue.IssueId);
+        Panel1.Visible = true;
         btnPreview.Visible = true;
         RequiredFieldValidator4.Visible = false;
         
@@ -159,6 +163,7 @@ public partial class Administration : System.Web.UI.Page
     {
         IssuePanel.Visible = false;
         UploadPanel.Visible = true;
+        TitleLabel.Text = "Upload issue";
     }
     protected void btnUploadOnWebServer_Click(object sender, EventArgs e)
     {
@@ -173,29 +178,42 @@ public partial class Administration : System.Web.UI.Page
 
     protected void btnSelect_Click(object sender, EventArgs e)
     {
-        Issue existingIssue = MagazineData.OpenIssue(OpenDropDownList.SelectedValue);
-        ResolutionDropDownList.Text = existingIssue.Resolution;
-        QualityTextBox.Text = existingIssue.Quality;
-        TxtAliasingDropDownList.Text = existingIssue.TextAntialiasing;
-        GraphAliasingDropDownList.Text = existingIssue.GraphicsAntialiasing;
-        CreateXML.CreatePagesXMLFile(existingIssue.IssueId);
-        btnPreview.Visible = true;
-        btnUploadOnServer.Visible = true;
-        IssuePanel.Visible = true;
-        Panel1.Visible = true;
-        IssueNameLabel.Visible = true;
-        NameTextBox.Visible = false;
-        btnCreate.Visible = false;
-        btnUpdate.Visible = true;
-        IssueNameLabel.Text = "Issue name: " + existingIssue.IssueId.ToUpper();
+        if (OpenDropDownList.SelectedValue == string.Empty)
+            StatusLabel.Text = "There are no current issues!";
+        else
+        {
+            Issue existingIssue = MagazineData.OpenIssue(OpenDropDownList.SelectedValue);
+            ResolutionDropDownList.Text = existingIssue.Resolution;
+            QualityTextBox.Text = existingIssue.Quality;
+            TxtAliasingDropDownList.Text = existingIssue.TextAntialiasing;
+            GraphAliasingDropDownList.Text = existingIssue.GraphicsAntialiasing;
+            CreateXML.CreatePagesXMLFile(existingIssue.IssueId);
+            btnPreview.Visible = true;
+            btnUploadOnServer.Visible = true;
+            IssuePanel.Visible = true;
+            Panel1.Visible = true;
+            IssueNameLabel.Visible = true;
+            NameTextBox.Visible = false;
+            btnCreate.Visible = false;
+            btnUpdate.Visible = true;
+            IssueNameLabel.Text = "Issue name: " + existingIssue.IssueId.ToUpper();
+        }
     }
     protected void btnDelete_Click(object sender, EventArgs e)
     {
-        CreateImages.DeleteImages(OpenDropDownList.SelectedValue);
-        StatusLabel.Text = MagazineData.DeleteIssue(OpenDropDownList.SelectedValue);
+        if (OpenDropDownList.SelectedValue == string.Empty)
+            StatusLabel.Text = "There are no current issues!";
+        else
+        {
+            CreateImages.DeleteImages(OpenDropDownList.SelectedValue);
+            StatusLabel.Text = MagazineData.DeleteIssue(OpenDropDownList.SelectedValue);
+            OpenDropDownList.DataBind();
+            Panel1.Visible = true;
+            IssuePanel.Visible = false;
+        }
     }
     protected void btnPreview_Click(object sender, EventArgs e)
     {
-
+        Panel1.Visible = true;
     }
 }

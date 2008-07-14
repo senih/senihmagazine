@@ -10,6 +10,7 @@ using System.Web.UI.WebControls;
 using System.Web.UI.WebControls.WebParts;
 using System.IO;
 using System.Text.RegularExpressions;
+using System.Collections.Generic;
 using Magazine;
 
 public partial class Administration : System.Web.UI.Page
@@ -78,17 +79,23 @@ public partial class Administration : System.Web.UI.Page
                         newIssue.Quality = QualityTextBox.Text;
                         newIssue.TextAntialiasing = TxtAliasingDropDownList.SelectedValue;
                         newIssue.GraphicsAntialiasing = GraphAliasingDropDownList.SelectedValue;
-                        StatusLabel.Text = CreateImages.CreateImagesGhostScript(newIssue);
+                        //StatusLabel.Text = CreateImages.CreateImagesGhostScript(newIssue);
                         string pdfpath = HttpContext.Current.Server.MapPath("~/pdf");
                         string sourcePDF = pdfpath + @"\temp.pdf";
+                        List<string> fileList;
+                        GhostScript.DeviceOption[] options = GhostScript.DeviceOptions.jpg(int.Parse(newIssue.Quality), int.Parse(newIssue.TextAntialiasing), int.Parse(newIssue.GraphicsAntialiasing));
+                        GhostScript gs = new GhostScript(ConfigurationManager.AppSettings["gspath"]);
+                        fileList = gs.Convert(GhostScript.OutputDevice.jpeg, options, sourcePDF, newIssue.IssueDirectory, "%d.jpg", pdfpath, int.Parse(newIssue.Resolution));
+                        gs.Dispose();
                         string destinationPDF = newIssue.IssueDirectory + @"\" + newIssue.IssueId + ".pdf";
                         File.Move(sourcePDF, destinationPDF);
-                        if (StatusLabel.Text == "Image files created!")
+                        if (fileList.Count == 0)
                         {
                             MagazineData.CreateIssue(newIssue);
                             CreateXML.CreatePagesXMLFile(newIssue.IssueId);
                             btnPreview.Visible = true;
                             btnUploadOnServer.Visible = true;
+                            StatusLabel.Text = "Image files created!";
                         }
                         else
                             StatusLabel.Text = "Error!";

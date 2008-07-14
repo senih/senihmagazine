@@ -156,5 +156,6 @@ namespace Magazine
             }
             Directory.Delete(path);
         }
+
     }
 }
